@@ -1,4 +1,4 @@
-const { isPresent_exec_cmd } = require("./utils");
+const { isPresent_exec_cmd, getCodeDiffInPR } = require("./utils");
 
 /**
  * This is the main entrypoint to your Probot app
@@ -8,8 +8,6 @@ module.exports = (app) => {
   app.log.info("Yay, the app was loaded!");
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    app.log.info(context.payload.pull_request);
-
     const { commits_url, comments_url } = context.payload.pull_request;
 
     Promise.all([fetch(commits_url), fetch(comments_url)])
@@ -20,20 +18,28 @@ module.exports = (app) => {
         const commitMsgs = commits.map((elem) => elem.commit.message);
         const commentMsgs = comments.map((elem) => elem.body);
 
-        app.log.info(commitMsgs);
-        app.log.info(commentMsgs);
-
         if (isPresent_exec_cmd(commitMsgs) || isPresent_exec_cmd(commentMsgs)) {
           app.log("has work");
+
+          const {
+            number: pull_number,
+            base: {
+              repo: {
+                name: repo,
+                owner: { login: owner },
+              },
+            },
+          } = context.payload.pull_request;
+
+          const data = getCodeDiffInPR({ context, owner, repo, pull_number });
+          data.then((diff) => {
+            app.log(diff);
+          });
         }
       });
   });
 
   app.on("issues.opened", async (context) => {
-    app.log("context");
-    app.log.info("context");
-    context.log("created");
-
     const issueComment = context.issue({
       body: "Thanks for opening an issue!",
     });
