@@ -1,6 +1,7 @@
 # pr-glimpse
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that A github app created using Probot to get a glimpse of a new PR
+> A GitHub App built with Probot that A github app created using Probot to get a glimpse of a new PR
+> [Go to the App](https://github.com/apps/pr-glimpse) 🔗
 
 ## Tech Stack
 1. Probot (Node.js framwork)
