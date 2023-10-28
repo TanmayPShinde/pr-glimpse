@@ -1,4 +1,8 @@
-const { isPresent_exec_cmd, getCodeDiffInPR } = require("./utils");
+const {
+  isPresent_exec_cmd,
+  getCodeDiffInPR,
+  getOpenAi_PR_explanation,
+} = require("./utils");
 
 /**
  * This is the main entrypoint to your Probot app
@@ -7,8 +11,10 @@ const { isPresent_exec_cmd, getCodeDiffInPR } = require("./utils");
 module.exports = (app) => {
   app.log.info("Yay, the app was loaded!");
 
-  app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    const { commits_url, comments_url } = context.payload.pull_request;
+  app.on(["pull_request.opened"], async (context) => {
+    const { commits_url, comments_url, title, body } =
+      context.payload.pull_request;
+    app.log.info("pr opened");
 
     Promise.all([fetch(commits_url), fetch(comments_url)])
       .then((responses) =>
@@ -17,6 +23,8 @@ module.exports = (app) => {
       .then(([commits, comments]) => {
         const commitMsgs = commits.map((elem) => elem.commit.message);
         const commentMsgs = comments.map((elem) => elem.body);
+
+        commentMsgs.push(title, body);
 
         if (isPresent_exec_cmd(commitMsgs) || isPresent_exec_cmd(commentMsgs)) {
           app.log("has work");
@@ -33,7 +41,15 @@ module.exports = (app) => {
 
           const data = getCodeDiffInPR({ context, owner, repo, pull_number });
           data.then((diff) => {
-            app.log(diff);
+            const resp = getOpenAi_PR_explanation(diff);
+            resp.then((data) => {
+              app.log(data);
+
+              const issueComment = context.issue({
+                body: data,
+              });
+              return context.octokit.issues.createComment(issueComment);
+            });
           });
         }
       });

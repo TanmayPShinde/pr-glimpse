@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^20.0.2",
-    "openai-streams": "^6.2.0",
+    "openai": "^4.14.1",
     "probot": "^12.2.4"
   },
   "devDependencies": {
