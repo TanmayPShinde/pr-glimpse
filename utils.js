@@ -4,9 +4,9 @@ const { openai } = require("./config/openai");
 const octokit = new Octokit();
 
 const isPresent_exec_cmd = (strings) =>
-  strings.some((str) => str.includes("/execute"));
+  strings.some((str) => str?.includes("/execute"));
 
-const getCodeDiffInPR = async ({ context, owner, repo, pull_number }) => {
+const getCodeDiffInPR = async ({ owner, repo, pull_number }) => {
   const { data: diff } = await octokit.pulls.get({
     owner,
     repo,

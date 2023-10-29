@@ -41,7 +41,7 @@ module.exports = (app) => {
           } = context.payload.pull_request;
 
           // fetching code diff in the PR from Octokit api
-          const data = getCodeDiffInPR({ context, owner, repo, pull_number });
+          const data = getCodeDiffInPR({ owner, repo, pull_number });
           data.then((diff) => {
             // getting description for changes in PR
             const resp = getOpenAi_PR_explanation(diff);
