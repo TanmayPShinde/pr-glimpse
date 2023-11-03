@@ -16,6 +16,8 @@ module.exports = (app) => {
       context.payload.pull_request;
     app.log.info("pr opened");
 
+    app.log(context.payload.pull_request);
+
     // fetched commits and comments on the PR
     Promise.all([fetch(commits_url), fetch(comments_url)])
       .then((responses) =>
@@ -38,23 +40,38 @@ module.exports = (app) => {
                 owner: { login: owner },
               },
             },
+            head: { ref: branch_name },
           } = context.payload.pull_request;
+
+          const codesandboxPreviewUrl = `https://codesandbox.io/s/github/${owner}/${repo}/tree/${branch_name}`;
 
           // fetching code diff in the PR from Octokit api
           const data = getCodeDiffInPR({ owner, repo, pull_number });
-          data.then((diff) => {
-            // getting description for changes in PR
-            const resp = getOpenAi_PR_explanation(diff);
-            resp.then((data) => {
-              app.log(data);
+          data
+            .then((diff) => {
+              // getting description for changes in PR
+              const resp = getOpenAi_PR_explanation(diff);
+              resp
+                .then((data) => {
+                  app.log(data);
 
-              // sending back the response with an added description as a comment
-              const issueComment = context.issue({
-                body: data,
-              });
-              return context.octokit.issues.createComment(issueComment);
+                  // sending back the response with an added description and preview as a comment
+                  const issueComment = context.issue({
+                    body:
+                      data +
+                      `\n### Codesandbox preview link:
+- ${codesandboxPreviewUrl}`,
+                  });
+                  return context.octokit.issues.createComment(issueComment);
+                })
+                .catch((err) => {
+                  app.log(err);
+                  throw err;
+                });
+            })
+            .catch((err) => {
+              return;
             });
-          });
         }
       });
   });
