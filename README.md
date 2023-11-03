@@ -3,6 +3,12 @@
 > A GitHub App built with Probot that A github app created using Probot to get a glimpse of a new PR
 > * [Go to the App](https://github.com/apps/pr-glimpse) 🔗
 
+
+
+https://github.com/TanmayPShinde/pr-glimpse/assets/62463484/4c2d51bc-4083-4a25-ab2a-4cad68508fad
+
+
+
 ## Tech Stack
 1. Probot (Node.js framwork)
 2. Github Apps
