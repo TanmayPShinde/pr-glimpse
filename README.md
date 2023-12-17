@@ -1,6 +1,6 @@
 # pr-glimpse
 
-> A GitHub App built with Probot that A github app created using Probot to get a glimpse of a new PR
+> A github app created using Probot to get description of a new PR using Generative AI
 > * [Go to the App](https://github.com/apps/pr-glimpse) 🔗
 
 
