@@ -18,9 +18,6 @@ https://github.com/TanmayPShinde/pr-glimpse/assets/62463484/4c2d51bc-4083-4a25-a
 ### Summary Report
 https://docs.google.com/document/d/1HPEWe7PoUjbXiVjTkprfoSVXRWHcNSQpm3G2i4P_qC4/edit?usp=sharing
 
-### Demo
-https://drive.google.com/file/d/1cGzh-cJsqgj4fWpOdvtfQG0dRZFH-tK-/view?usp=drive_link
-
 ## Setup Instructions
 1. Clone the Repository
 2. Install dependencies
