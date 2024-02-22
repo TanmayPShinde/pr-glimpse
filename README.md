@@ -15,9 +15,6 @@ https://github.com/TanmayPShinde/pr-glimpse/assets/62463484/4c2d51bc-4083-4a25-a
 3. Javascript
 4. Open AI - LLM API
 
-### Summary Report
-https://docs.google.com/document/d/1HPEWe7PoUjbXiVjTkprfoSVXRWHcNSQpm3G2i4P_qC4/edit?usp=sharing
-
 ## Setup Instructions
 1. Clone the Repository
 2. Install dependencies
